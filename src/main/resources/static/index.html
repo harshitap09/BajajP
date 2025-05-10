@@ -5,33 +5,33 @@
   <title>BFHL API Tester</title>
   <style>
     body {
-      font-family: monospace;
       background: #1e1e1e;
+      font-family: monospace;
       color: #d4d4d4;
-      padding: 40px;
+      padding: 30px;
     }
 
     .container {
-      max-width: 700px;
-      margin: 0 auto;
-      background: #2d2d2d;
+      max-width: 800px;
+      margin: auto;
+      background: #252526;
       padding: 20px;
-      border-radius: 10px;
-      box-shadow: 0 0 10px #000;
+      border-radius: 8px;
+      box-shadow: 0 0 8px #000;
     }
 
-    input, button, textarea {
-      font-family: monospace;
-      font-size: 16px;
+    textarea, button {
       width: 100%;
-      margin-bottom: 10px;
+      font-size: 16px;
       padding: 10px;
       border-radius: 5px;
+      margin-top: 10px;
+      margin-bottom: 20px;
       border: none;
     }
 
     button {
-      background: #007acc;
+      background-color: #007acc;
       color: white;
       cursor: pointer;
     }
@@ -40,9 +40,8 @@
       background: #1e1e1e;
       padding: 20px;
       border-radius: 5px;
-      white-space: pre-wrap;
-      word-wrap: break-word;
       color: #9cdcfe;
+      white-space: pre-wrap;
     }
 
     h1 {
@@ -52,38 +51,44 @@
 </head>
 <body>
   <div class="container">
-    <h1>BFHL POST API Tester</h1>
-    <form id="dataForm">
-      <label for="arrayInput">Enter input like: <code>{ 1, "A", 7, "B" }</code></label>
-      <input type="text" id="arrayInput" placeholder='{ 1, "A", 7, "B" }' />
+    <h1>BFHL API Request Tester</h1>
+    <form id="apiForm">
+      <label for="jsonInput">Enter JSON like:<br><code>{ "data": ["A", "1", "334", "4", "R"] }</code></label>
+      <textarea id="jsonInput" rows="5">
+{
+  "data": ["A", "1", "334", "4", "R"]
+}
+      </textarea>
       <button type="submit">Send Request</button>
     </form>
+
     <h2>Response:</h2>
     <pre id="responseBox">{ }</pre>
   </div>
 
   <script>
-    document.getElementById("dataForm").addEventListener("submit", async (e) => {
+    document.getElementById("apiForm").addEventListener("submit", async (e) => {
       e.preventDefault();
-      const input = document.getElementById("arrayInput").value;
+      const rawInput = document.getElementById("jsonInput").value;
 
-      // Clean and convert { 1, "A", 7, "B" } to a proper array
-      const clean = input
-        .replace(/^{|}$/g, '')          // remove outer { }
-        .split(',')
-        .map(x => x.trim().replace(/^"|"$/g, ''))  // trim and strip quotes
+      try {
+        const json = JSON.parse(rawInput);
 
-      // Wrap strings in quotes, keep numbers as strings (as per API)
-      const jsonArray = clean.map(val => val.replace(/^"|"$/g, ''));
+        if (!json.data || !Array.isArray(json.data)) {
+          throw new Error("JSON must contain a 'data' array.");
+        }
 
-      const response = await fetch("https://your-backend.onrender.com/bfhl", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ data: jsonArray })
-      });
+        const response = await fetch("/bfhl", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(json)
+        });
 
-      const result = await response.json();
-      document.getElementById("responseBox").textContent = JSON.stringify(result, null, 2);
+        const result = await response.json();
+        document.getElementById("responseBox").textContent = JSON.stringify(result, null, 2);
+      } catch (error) {
+        document.getElementById("responseBox").textContent = `❌ Error: ${error.message}`;
+      }
     });
   </script>
 </body>
