@@ -25,9 +25,9 @@ public class BajajController {
 
         ResponseData response = new ResponseData();
         response.setIs_success(true);
-        response.setUser_id("your_name_ddmmyyyy");
-        response.setEmail("your@email.com");
-        response.setRoll_number("YourRoll123");
+        response.setUser_id("HarshitaPanwar09102004");
+        response.setEmail("harshitapanwar0910@email.com");
+        response.setRoll_number("0827CI221059");
         response.setNumbers(numbers);
         response.setAlphabets(alphabets);
 
