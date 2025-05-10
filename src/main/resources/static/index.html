@@ -2,29 +2,84 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>BFHL Challenge</title>
-  <link rel="stylesheet" href="styles.css">
+  <title>BFHL API Tester</title>
+  <style>
+    body {
+      font-family: monospace;
+      background: #1e1e1e;
+      color: #d4d4d4;
+      padding: 40px;
+    }
+
+    .container {
+      max-width: 700px;
+      margin: 0 auto;
+      background: #2d2d2d;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px #000;
+    }
+
+    input, button, textarea {
+      font-family: monospace;
+      font-size: 16px;
+      width: 100%;
+      margin-bottom: 10px;
+      padding: 10px;
+      border-radius: 5px;
+      border: none;
+    }
+
+    button {
+      background: #007acc;
+      color: white;
+      cursor: pointer;
+    }
+
+    pre {
+      background: #1e1e1e;
+      padding: 20px;
+      border-radius: 5px;
+      white-space: pre-wrap;
+      word-wrap: break-word;
+      color: #9cdcfe;
+    }
+
+    h1 {
+      color: #569cd6;
+    }
+  </style>
 </head>
 <body>
   <div class="container">
-    <h1>BFHL API Tester</h1>
+    <h1>BFHL POST API Tester</h1>
     <form id="dataForm">
-      <input type="text" id="dataInput" placeholder='Enter values like: 1,A,3,B'>
-      <button type="submit">Submit</button>
+      <label for="arrayInput">Enter input like: <code>{ 1, "A", 7, "B" }</code></label>
+      <input type="text" id="arrayInput" placeholder='{ 1, "A", 7, "B" }' />
+      <button type="submit">Send Request</button>
     </form>
-    <pre id="responseBox"></pre>
+    <h2>Response:</h2>
+    <pre id="responseBox">{ }</pre>
   </div>
 
   <script>
     document.getElementById("dataForm").addEventListener("submit", async (e) => {
       e.preventDefault();
-      const raw = document.getElementById("dataInput").value;
-      const arr = raw.split(",").map(el => el.trim());
+      const input = document.getElementById("arrayInput").value;
 
-      const response = await fetch("https://your-app.onrender.com/bfhl", {
+      // Clean and convert { 1, "A", 7, "B" } to a proper array
+      const clean = input
+        .replace(/^{|}$/g, '')          // remove outer { }
+        .split(',')
+        .map(x => x.trim().replace(/^"|"$/g, ''))  // trim and strip quotes
+
+      // Wrap strings in quotes, keep numbers as strings (as per API)
+      const jsonArray = clean.map(val => val.replace(/^"|"$/g, ''));
+
+      const response = await fetch("https://your-backend.onrender.com/bfhl", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ data: arr })
+        body: JSON.stringify({ data: jsonArray })
       });
 
       const result = await response.json();
