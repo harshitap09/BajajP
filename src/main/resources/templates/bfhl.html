@@ -1,0 +1,95 @@
+<!--<!DOCTYPE html>-->
+<!--<html lang="en">-->
+<!--<head>-->
+<!--  <meta charset="UTF-8">-->
+<!--  <title>BFHL API Tester</title>-->
+<!--  <style>-->
+<!--    body {-->
+<!--      background: #1e1e1e;-->
+<!--      font-family: monospace;-->
+<!--      color: #d4d4d4;-->
+<!--      padding: 30px;-->
+<!--    }-->
+
+<!--    .container {-->
+<!--      max-width: 800px;-->
+<!--      margin: auto;-->
+<!--      background: #252526;-->
+<!--      padding: 20px;-->
+<!--      border-radius: 8px;-->
+<!--      box-shadow: 0 0 8px #000;-->
+<!--    }-->
+
+<!--    textarea, button {-->
+<!--      width: 100%;-->
+<!--      font-size: 16px;-->
+<!--      padding: 10px;-->
+<!--      border-radius: 5px;-->
+<!--      margin-top: 10px;-->
+<!--      margin-bottom: 20px;-->
+<!--      border: none;-->
+<!--    }-->
+
+<!--    button {-->
+<!--      background-color: #007acc;-->
+<!--      color: white;-->
+<!--      cursor: pointer;-->
+<!--    }-->
+
+<!--    pre {-->
+<!--      background: #1e1e1e;-->
+<!--      padding: 20px;-->
+<!--      border-radius: 5px;-->
+<!--      color: #9cdcfe;-->
+<!--      white-space: pre-wrap;-->
+<!--    }-->
+
+<!--    h1 {-->
+<!--      color: #569cd6;-->
+<!--    }-->
+<!--  </style>-->
+<!--</head>-->
+<!--<body>-->
+<!--  <div class="container">-->
+<!--    <h1>BFHL API Request Tester</h1>-->
+<!--    <form id="apiForm">-->
+<!--      <label for="jsonInput">Enter JSON like:<br><code>{ "data": ["A", "1", "334", "4", "R"] }</code></label>-->
+<!--      <textarea id="jsonInput" rows="5">-->
+<!--{-->
+<!--  "data": ["A", "1", "334", "4", "R"]-->
+<!--}-->
+<!--      </textarea>-->
+<!--      <button type="submit">Send Request</button>-->
+<!--    </form>-->
+
+<!--    <h2>Response:</h2>-->
+<!--    <pre id="responseBox">{ }</pre>-->
+<!--  </div>-->
+
+<!--  <script>-->
+<!--    document.getElementById("apiForm").addEventListener("submit", async (e) => {-->
+<!--      e.preventDefault();-->
+<!--      const rawInput = document.getElementById("jsonInput").value;-->
+
+<!--      try {-->
+<!--        const json = JSON.parse(rawInput);-->
+
+<!--        if (!json.data || !Array.isArray(json.data)) {-->
+<!--          throw new Error("JSON must contain a 'data' array.");-->
+<!--        }-->
+
+<!--        const response = await fetch("/bfhl", {-->
+<!--          method: "POST",-->
+<!--          headers: { "Content-Type": "application/json" },-->
+<!--          body: JSON.stringify(json)-->
+<!--        });-->
+
+<!--        const result = await response.json();-->
+<!--        document.getElementById("responseBox").textContent = JSON.stringify(result, null, 2);-->
+<!--      } catch (error) {-->
+<!--        document.getElementById("responseBox").textContent = `❌ Error: ${error.message}`;-->
+<!--      }-->
+<!--    });-->
+<!--  </script>-->
+<!--</body>-->
+<!--</html>-->
